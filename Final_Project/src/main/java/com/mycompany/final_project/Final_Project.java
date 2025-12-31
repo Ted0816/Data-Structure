@@ -36,8 +36,7 @@ public class Final_Project {
             System.out.println("8. Sort Books ID");
             System.out.println("9. Borrow Book");
             System.out.println("10. View Recently Borrowed Books");
-            System.out.println("11. return Books");
-            System.out.println("12. View returned Books");
+            System.out.println("11. return Books");          
             System.out.println("0. Exit");
             System.out.print("Enter choice: ");
             choice = ted.nextInt();
@@ -73,10 +72,7 @@ public class Final_Project {
                     break;
                 case 11:
                     returnBook();
-                    break;
-                case 12:
-                     viewReturnedBooks();
-                     break;
+                    break;             
                 case 0:
                     System.out.println("Exit");
                     break;                   
@@ -170,7 +166,7 @@ public class Final_Project {
         for (int i = 0; i < books.size(); i++) {
             int min = i;
             for (int j = i + 1; j < books.size(); j++) {
-                if (books.get(j).year < books.get(min).year)
+                if (books.get(j).id < books.get(min).id)
                     min = j;
             }
             Collections.swap(books, i, min);
@@ -208,13 +204,12 @@ public class Final_Project {
     System.out.print("Enter Book ID to return: ");
     int id = ted.nextInt();
     boolean found = false;
-
-    // Look for the book in the borrowed stack
+    
     for (int i = 0; i < borrowedStack.size(); i++) {
         Book b = borrowedStack.get(i);
         if (b.id == id) {
-            borrowedStack.remove(i);  // Remove from borrowed stack
-            books.add(b);  // Add the book back to available books
+            borrowedStack.remove(i);  
+            books.add(b);  
             System.out.println("Book returned successfully.");
             found = true;
             break;
@@ -223,15 +218,6 @@ public class Final_Project {
 
     if (!found) {
         System.out.println("Book not found in borrowed books.");
-    }
-}static void viewReturnedBooks() {
-    if (returnedBooks.isEmpty()) {
-        System.out.println("No books have been returned yet.");
-    } else {
-        System.out.println("Returned books:");
-        for (Book b : returnedBooks) {
-            b.display();
-        }
     }
 }
 }
