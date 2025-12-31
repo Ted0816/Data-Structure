@@ -15,54 +15,87 @@ import java.util.Stack;
  * @author POGZ INTERNET CAFE
  */
 public class Final_Project {
+    static Scanner ted = new Scanner(System.in);
+    static Stack<Book> borrowedStack = new Stack<>();
     static ArrayList<Book> books = new ArrayList<>();
     static HashMap<Integer, Book> bookMap = new HashMap<>();
-    static Stack<Book> borrowedStack = new Stack<>();
-    static Scanner sc = new Scanner(System.in);
+    static ArrayList<Book> returnedBooks = new ArrayList<>();   
+   
 
     public static void main(String[] args) {
         int choice;
         do {
-            System.out.println("\n--- Library Inventory Menu ---");
+            System.out.println("\nLibrary Inventory");
             System.out.println("1. Add Book");
             System.out.println("2. Remove Book");
             System.out.println("3. Display All Books");
-            System.out.println("4. Search Book by Title");
-            System.out.println("5. Search Book by ID");
-            System.out.println("6. Sort Books by Title");
-            System.out.println("7. Sort Books by Year");
-            System.out.println("8. Borrow Book");
-            System.out.println("9. View Recently Borrowed Books");
+            System.out.println("4. Search Book Title");
+            System.out.println("5. Search Book ID");
+            System.out.println("6. Sort Books Title");
+            System.out.println("7. Sort Books Year");
+            System.out.println("8. Sort Books ID");
+            System.out.println("9. Borrow Book");
+            System.out.println("10. View Recently Borrowed Books");
+            System.out.println("11. return Books");
+            System.out.println("12. View returned Books");
             System.out.println("0. Exit");
             System.out.print("Enter choice: ");
-            choice = sc.nextInt();
+            choice = ted.nextInt();
 
             switch (choice) {
-                case 1 -> addBook();
-                case 2 -> removeBook();
-                case 3 -> displayBooks();
-                case 4 -> searchByTitle();
-                case 5 -> searchByID();
-                case 6 -> sortByTitle();
-                case 7 -> sortByYear();
-                case 8 -> borrowBook();
-                case 9 -> viewBorrowed();
-                case 0 -> System.out.println("Exiting...");
-                default -> System.out.println("Invalid choice!");
+                case 1:
+                    addBook();
+                    break;
+                case 2:
+                    removeBook();
+                case 3:
+                    displayBooks();
+                    break;
+                case 4:
+                     searchByTitle();
+                case 5:                                    
+                    searchByID();
+                    break;
+                case 6:
+                    sortByTitle();
+                    break;
+                case 7:
+                    sortByYear();
+                    break;
+                    case 8:
+                    sortByID();
+                    break;
+                case 9:
+                     borrowBook();
+                     break;
+                case 10:
+                    viewBorrowed();
+                    break;
+                case 11:
+                    returnBook();
+                    break;
+                case 12:
+                     viewReturnedBooks();
+                     break;
+                case 0:
+                    System.out.println("Exit");
+                    break;                   
+                default:
+                    System.out.println("Invalid choice!");
             }
         } while (choice != 0);
     }
 
     static void addBook() {
         System.out.print("Enter ID: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        int id = ted.nextInt();
+        ted.nextLine();
         System.out.print("Enter Title: ");
-        String title = sc.nextLine();
+        String title = ted.nextLine();
         System.out.print("Enter Author: ");
-        String author = sc.nextLine();
+        String author = ted.nextLine();
         System.out.print("Enter Year: ");
-        int year = sc.nextInt();
+        int year = ted.nextInt();
 
         Book b = new Book(id, title, author, year);
         books.add(b);
@@ -72,7 +105,7 @@ public class Final_Project {
 
     static void removeBook() {
         System.out.print("Enter Book ID to remove: ");
-        int id = sc.nextInt();
+        int id = ted.nextInt();
         Book b = bookMap.remove(id);
         if (b != null) {
             books.remove(b);
@@ -89,9 +122,9 @@ public class Final_Project {
     }
 
     static void searchByTitle() {
-        sc.nextLine();
+        ted.nextLine();
         System.out.print("Enter title: ");
-        String key = sc.nextLine();
+        String key = ted.nextLine();
         for (Book b : books) {
             if (b.title.equalsIgnoreCase(key)) {
                 b.display();
@@ -103,7 +136,7 @@ public class Final_Project {
 
     static void searchByID() {
         System.out.print("Enter ID: ");
-        int id = sc.nextInt();
+        int id = ted.nextInt();
         Book b = bookMap.get(id);
         if (b != null)
             b.display();
@@ -132,11 +165,22 @@ public class Final_Project {
             Collections.swap(books, i, min);
         }
         System.out.println("Books sorted by year.");
+    } 
+    static void sortByID() {
+        for (int i = 0; i < books.size(); i++) {
+            int min = i;
+            for (int j = i + 1; j < books.size(); j++) {
+                if (books.get(j).year < books.get(min).year)
+                    min = j;
+            }
+            Collections.swap(books, i, min);
+        }
+        System.out.println("Books sorted by ID.");
     }
 
     static void borrowBook() {
         System.out.print("Enter Book ID to borrow: ");
-        int id = sc.nextInt();
+        int id = ted.nextInt();
         Book b = bookMap.get(id);
         if (b != null) {
             borrowedStack.push(b);
@@ -155,5 +199,39 @@ public class Final_Project {
             }
         }
     }
-}
+    static void returnBook() {
+    if (borrowedStack.isEmpty()) {
+        System.out.println("No borrowed books.");
+        return;
+    }
 
+    System.out.print("Enter Book ID to return: ");
+    int id = ted.nextInt();
+    boolean found = false;
+
+    // Look for the book in the borrowed stack
+    for (int i = 0; i < borrowedStack.size(); i++) {
+        Book b = borrowedStack.get(i);
+        if (b.id == id) {
+            borrowedStack.remove(i);  // Remove from borrowed stack
+            books.add(b);  // Add the book back to available books
+            System.out.println("Book returned successfully.");
+            found = true;
+            break;
+        }
+    }
+
+    if (!found) {
+        System.out.println("Book not found in borrowed books.");
+    }
+}static void viewReturnedBooks() {
+    if (returnedBooks.isEmpty()) {
+        System.out.println("No books have been returned yet.");
+    } else {
+        System.out.println("Returned books:");
+        for (Book b : returnedBooks) {
+            b.display();
+        }
+    }
+}
+}
