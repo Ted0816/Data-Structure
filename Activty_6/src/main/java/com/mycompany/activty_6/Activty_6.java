@@ -13,7 +13,7 @@ public class Activty_6 {
     public static void main(String[] args) {
           
 
-        // Problem 1: Student Grades
+       
         int[] grades = {85, 72, 90, 65, 88,99};
         ArraySort.bubbleSort(grades.clone());
         ArraySort.selectionSort(grades.clone());
@@ -21,13 +21,13 @@ public class Activty_6 {
 
         System.out.println();
 
-        // Problem 2: Alphabetical Names
+      
         String[] names = {"Ted", "Andrei", "Josef", "Geraldino"};
         AlphabeticalSort.selectionSort(names);
 
         System.out.println();
 
-        // Problem 3: Leaderboard Ranking
+       
         int[] scores = {16, 21, 03, 12, 02};
         Leaderboard.insertionSortDescending(scores);
     }
